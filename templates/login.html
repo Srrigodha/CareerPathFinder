@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Career Path Finder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v=11">
+    <style>
+        .auth-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+        }
+
+        .auth-panel {
+            max-width: 450px;
+            width: 100%;
+        }
+        
+        .auth-switch {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+        }
+        
+        .auth-switch a {
+            color: var(--primary-color);
+            cursor: pointer;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="app-header" style="justify-content: center;">
+            <div class="logo" style="text-align: center;">
+                <h1 style="margin-bottom: 5px;">Career Path <span class="highlight">Finder</span></h1>
+                <p>Welcome to your personal career tracker.</p>
+            </div>
+        </header>
+
+        <div class="auth-container fade-in">
+            <section class="panel auth-panel" id="login-section">
+                <h2 style="justify-content: center;">👤 Secure Login</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="login-user" required autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="login-pass" required autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="login-btn">Log In</button>
+                    <p id="login-error" style="color: var(--urgent-color); text-align: center; margin-top: 1rem;"></p>
+                </form>
+                <div class="auth-switch">
+                    Don't have an account? <a id="show-signup">Sign Up</a>
+                </div>
+            </section>
+
+            <section class="panel auth-panel hidden" id="signup-section">
+                <h2 style="justify-content: center;">✨ Create Account</h2>
+                <form id="signup-form">
+                    <div class="form-group">
+                        <label>Choose a Username</label>
+                        <input type="text" id="signup-user" required autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label>Choose a Password</label>
+                        <input type="password" id="signup-pass" required autocomplete="new-password">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="signup-btn">Sign Up</button>
+                    <p id="signup-error" style="color: var(--urgent-color); text-align: center; margin-top: 1rem;"></p>
+                </form>
+                <div class="auth-switch">
+                    Already have an account? <a id="show-login">Log In</a>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme setup based on index
+            const currentTheme = localStorage.getItem('theme');
+            if (currentTheme) { document.documentElement.setAttribute('data-theme', currentTheme); }
+
+            const loginSection = document.getElementById('login-section');
+            const signupSection = document.getElementById('signup-section');
+            
+            document.getElementById('show-signup').addEventListener('click', () => {
+                loginSection.classList.add('hidden');
+                signupSection.classList.remove('hidden');
+            });
+
+            document.getElementById('show-login').addEventListener('click', () => {
+                signupSection.classList.add('hidden');
+                loginSection.classList.remove('hidden');
+            });
+
+            const API_BASE = 'http://127.0.0.1:5005/api';
+
+            document.getElementById('login-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const err = document.getElementById('login-error');
+                err.textContent = '';
+                
+                const user = document.getElementById('login-user').value;
+                const pass = document.getElementById('login-pass').value;
+
+                try {
+                    const res = await fetch(`${API_BASE}/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({username: user, password: pass})
+                    });
+                    const data = await res.json();
+                    
+                    if (!res.ok) {
+                        err.textContent = data.error || 'Login failed';
+                        return;
+                    }
+
+                    localStorage.setItem('session_user_id', data.user_id);
+                    localStorage.setItem('session_username', data.username);
+                    window.location.href = '/';
+                } catch(error) {
+                    err.textContent = 'Server connection error.';
+                }
+            });
+
+            document.getElementById('signup-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const err = document.getElementById('signup-error');
+                err.textContent = '';
+                
+                const user = document.getElementById('signup-user').value;
+                const pass = document.getElementById('signup-pass').value;
+
+                try {
+                    const res = await fetch(`${API_BASE}/signup`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({username: user, password: pass})
+                    });
+                    const data = await res.json();
+                    
+                    if (!res.ok) {
+                        err.textContent = data.error || 'Signup failed';
+                        return;
+                    }
+
+                    localStorage.setItem('session_user_id', data.user_id);
+                    localStorage.setItem('session_username', data.username);
+                    window.location.href = '/';
+                } catch(error) {
+                    err.textContent = 'Server connection error.';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

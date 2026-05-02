@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Path Finder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style_v2.css?v=3">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- Notifications Bar -->
+    <div id="notifications-tray" class="notifications-tray hidden">
+        <div class="notifications-header">
+            <h3>🔔 Important Alerts</h3>
+            <button id="close-notifications" class="btn-icon">×</button>
+        </div>
+        <div id="notifications-list" class="notifications-list"></div>
+    </div>
+
+    <!-- Dashboard Layout -->
+    <div class="dashboard-layout">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>Career Path <span class="highlight" style="color: var(--primary-color)">Finder</span></h1>
+                <p>Student Opportunity<br>Dashboard</p>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-btn active" data-target="view-overview">Overview</button>
+                <button class="nav-btn" data-target="view-career">Career Paths</button>
+                <button class="nav-btn" data-target="view-scholarships">Scholarships</button>
+                <button class="nav-btn" data-target="view-exams">Exam Recommendations</button>
+            </nav>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="dashboard-main">
+            
+            <header class="app-header" style="justify-content: flex-end">
+                <div style="display: flex; gap: 1rem; align-items: center;">
+                    <div id="auth-controls" style="display: flex; align-items: center; gap: 1rem; border-right: 1px solid var(--panel-border); padding-right: 1rem;">
+                        <span id="user-greeting" style="font-weight: 600; color: var(--text-primary);" class="hidden"></span>
+                        <button id="login-nav-btn" class="btn btn-primary" style="padding: 0.5rem 1rem;">Login / Sign Up</button>
+                        <button id="logout-nav-btn" class="btn btn-outline hidden" style="padding: 0.5rem 1rem;">Logout</button>
+                    </div>
+                    <button id="theme-toggle" class="btn-icon" style="font-size: 1.2rem; width: 40px; height: 40px; background: var(--panel-border);" aria-label="Toggle Theme">
+                        🌙
+                    </button>
+                    <button id="toggle-notifications" class="btn btn-outline">
+                        Notifications <span id="notification-badge" class="badge">0</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- VIEW: Overview -->
+            <div id="view-overview" class="dashboard-view active">
+                
+                <!-- Welcome Section -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div>
+                        <h2 style="font-size: 1.6rem; color: var(--text-primary); margin-bottom: 0.3rem;">Welcome, Explorer</h2>
+                        <p style="color: var(--text-secondary); font-size: 1.1rem; line-height: 1.6; max-width: 100%; margin-top: 0.5rem;">Track your future with AI-guided insights, filtered opportunities, and a clear next-step roadmap.</p>
+                    </div>
+                </div>
+
+                <!-- 4 Stat Cards -->
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem;">
+                    <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 1.2rem; border-radius: var(--radius-md); display: flex; align-items: center; gap: 1rem;">
+                        <span style="font-size: 1.5rem;">💼</span>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0;">Career Matches</p>
+                            <h3 style="color: var(--text-primary); font-size: 1.4rem; margin: 0;">3</h3>
+                        </div>
+                    </div>
+                    <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 1.2rem; border-radius: var(--radius-md); display: flex; align-items: center; gap: 1rem;">
+                        <span style="font-size: 1.5rem;">🎓</span>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0;">Scholarships Found</p>
+                            <h3 style="color: var(--text-primary); font-size: 1.4rem; margin: 0;">2</h3>
+                        </div>
+                    </div>
+                    <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 1.2rem; border-radius: var(--radius-md); display: flex; align-items: center; gap: 1rem;">
+                        <span style="font-size: 1.5rem;">📝</span>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0;">Relevant Exams</p>
+                            <h3 style="color: var(--text-primary); font-size: 1.4rem; margin: 0;">2</h3>
+                        </div>
+                    </div>
+                    <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 1.2rem; border-radius: var(--radius-md); display: flex; align-items: center; gap: 1rem;">
+                        <span style="font-size: 1.5rem;">📈</span>
+                        <div>
+                            <p style="color: var(--text-secondary); font-size: 0.8rem; margin: 0;">Goal Readiness</p>
+                            <h3 style="color: var(--text-primary); font-size: 1.4rem; margin: 0;">95%</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Career Generator + Demand Snapshot Split -->
+                <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1.5rem;">
+                    <!-- LEFT: Form -->
+                    <section class="panel form-panel" style="margin: 0;">
+                        <h2 style="font-size: 1.3rem; margin-bottom: 0.3rem;">Career Path Finder</h2>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">Share your interests, skills, and career goal to generate a practical step-by-step roadmap.</p>
+                        <form id="roadmap-form">
+                            <div class="form-group">
+                                <label for="stage">Current Academic Stage</label>
+                                <select id="stage" name="stage" required>
+                                    <option value="">Select your stage...</option>
+                                    <option value="10th Standard">10th Standard</option>
+                                    <option value="12th Science (PCM)">12th Science (PCM)</option>
+                                    <option value="12th Science (PCB)">12th Science (PCB)</option>
+                                    <option value="12th Commerce">12th Commerce</option>
+                                    <option value="12th Arts">12th Arts</option>
+                                    <option value="Undergraduate">Undergraduate</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="interests">Interests and Existing Skills</label>
+                                <input type="text" id="interests" name="interests" placeholder="e.g., Coding, Math, Drawing..." required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="goal">Target Career Goal</label>
+                                <input type="text" id="goal" name="goal" placeholder="e.g., Software Engineer, Doctor, IAS..." required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100" id="generate-btn" style="background: var(--primary-color);">
+                                <span>Generate Roadmap</span>
+                                <div class="loader hidden" id="generate-loader"></div>
+                            </button>
+                        </form>
+                    </section>
+
+                    <!-- RIGHT: Demand Snapshot -->
+                    <section class="panel" style="margin: 0; display: flex; flex-direction: column; gap: 1.2rem;">
+                        <div>
+                            <h2 style="font-size: 1.2rem; margin-bottom: 0.3rem;">Career Demand Snapshot</h2>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">Explore demand trends for top student career tracks.</p>
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                            <span style="font-size: 0.75rem; color: var(--text-secondary);">Technology (86%)</span>
+                            <div style="width: 100%; background: var(--input-border); height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 86%; background: var(--primary-color); height: 100%;"></div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                            <span style="font-size: 0.75rem; color: var(--text-secondary);">Healthcare (78%)</span>
+                            <div style="width: 100%; background: var(--input-border); height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 78%; background: var(--primary-color); height: 100%;"></div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                            <span style="font-size: 0.75rem; color: var(--text-secondary);">Design & Media (69%)</span>
+                            <div style="width: 100%; background: var(--input-border); height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 69%; background: var(--primary-color); height: 100%;"></div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+                            <span style="font-size: 0.75rem; color: var(--text-secondary);">Public Services (72%)</span>
+                            <div style="width: 100%; background: var(--input-border); height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="width: 72%; background: var(--primary-color); height: 100%;"></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="chart-container" id="chart-wrapper" style="background: var(--card-bg); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--card-border); margin-bottom: 2rem; display: none;">
+                    <canvas id="progressChart" style="max-height: 250px;"></canvas>
+                </div>
+            </div>
+
+            <!-- VIEW: Career Paths (Results Only since Form moved to Overview) -->
+            <div id="view-career" class="dashboard-view">
+                <section class="panel results-panel fade-in hidden" id="roadmap-results" style="width: 100%;">
+                    <h2>Your Career Roadmap 🚀</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">Clear learning and milestone sequence to help you stay focused.</p>
+                    
+                    <!-- Smart Insights -->
+                    <div id="smart-insights" style="background: rgba(99, 102, 241, 0.05); border-left: 3px solid var(--primary-color); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                        <h4 style="color: var(--primary-color); margin: 0; font-size: 0.9rem;">💡 Personalized Insights</h4>
+                        <div id="insights-container" style="font-size: 0.85rem; color: var(--text-primary); display: flex; flex-direction: column; gap: 0.3rem;"></div>
+                    </div>
+
+                    <div class="roadmap-grid" style="width: 100%;">
+                        <div class="roadmap-main" style="width: 100%; max-width: 100%;">
+                            <h3>Step-by-Step Guide</h3>
+                            <div id="roadmap-steps" class="timeline"></div>
+                        </div>
+
+                        <div class="roadmap-sidebar">
+                            <div class="sidebar-card">
+                                <h4>🛠️ Required Skills</h4>
+                                <ul id="required-skills"></ul>
+                            </div>
+
+                            <div class="sidebar-card">
+                                <h4>Career Match Cards</h4>
+                                <div id="career-match-cards"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- VIEW: Scholarships -->
+            <div id="view-scholarships" class="dashboard-view">
+                <!-- AI RECOMMENDED SCHOLARSHIPS SECTION -->
+                <section class="panel full-width" style="margin-bottom: 2rem; border-color: var(--primary-color); border-width: 2px;">
+                    <div class="section-header">
+                        <h2>🌟 Recommended Scholarships for You</h2>
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem; font-style: italic;">Recommended based on your AI-generated roadmap</p>
+                    </div>
+                    <div class="card-grid" id="recommended-scholarships-grid">
+                        <p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center; padding: 2rem 0;">Generate an AI roadmap to unlock personalized scholarship recommendations.</p>
+                    </div>
+                </section>
+
+                <!-- EXPLORE MORE / MANUAL FILTERS SECTION -->
+                <section class="panel full-width">
+                    <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <h2>🔍 Explore More</h2>
+                            <p style="color: var(--text-secondary); margin-top: 0.5rem;">Results are tailored based on your selected preferences (approximate match)</p>
+                        </div>
+                        <div style="width: 100%; margin-bottom: 1rem; padding: 1rem; background: rgba(99, 102, 241, 0.05); border-left: 3px solid var(--primary-color); border-radius: var(--radius-md);">
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem; max-width: 300px;">
+                                <label style="font-weight: 600; font-size: 0.9rem; color: var(--text-primary);">📍 Personalize by Location</label>
+                                <select id="user-location-selector" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); background: var(--input-bg); color: var(--text-primary); border: 1px solid var(--input-border);">
+                                    <option value="any">Anywhere / National</option>
+                                    <option value="andhra_pradesh">Andhra Pradesh</option>
+                                    <option value="assam">Assam</option>
+                                    <option value="bihar">Bihar</option>
+                                    <option value="chhattisgarh">Chhattisgarh</option>
+                                    <option value="delhi">Delhi</option>
+                                    <option value="gujarat">Gujarat</option>
+                                    <option value="haryana">Haryana</option>
+                                    <option value="jharkhand">Jharkhand</option>
+                                    <option value="karnataka">Karnataka</option>
+                                    <option value="kerala">Kerala</option>
+                                    <option value="madhya_pradesh">Madhya Pradesh</option>
+                                    <option value="maharashtra">Maharashtra</option>
+                                    <option value="odisha">Odisha</option>
+                                    <option value="punjab">Punjab</option>
+                                    <option value="rajasthan">Rajasthan</option>
+                                    <option value="tamil_nadu">Tamil Nadu</option>
+                                    <option value="telangana">Telangana</option>
+                                    <option value="uttar_pradesh">Uttar Pradesh</option>
+                                    <option value="uttarakhand">Uttarakhand</option>
+                                    <option value="west_bengal">West Bengal</option>
+                                </select>
+                                <span style="font-size: 0.75rem; color: var(--text-secondary); font-style: italic;">Results are approximate based on selected location.</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <div style="display: flex; flex-direction: column;">
+                                <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Eligibility</label>
+                                <select id="scholarship-filter-eligibility" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); background: var(--input-bg); color: var(--text-primary); border: 1px solid var(--input-border);">
+                                    <option value="all">All Levels</option>
+                                    <option value="10th">10th Standard</option>
+                                    <option value="12th">12th Standard</option>
+                                    <option value="undergraduate">Undergraduate</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; flex-direction: column;">
+                                <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Location</label>
+                                <select id="scholarship-filter-location" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); background: var(--input-bg); color: var(--text-primary); border: 1px solid var(--input-border);">
+                                    <option value="all">Anywhere in India</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; flex-direction: column;">
+                                <label style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.3rem;">Field of Study</label>
+                                <select id="scholarship-filter-field" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); background: var(--input-bg); color: var(--text-primary); border: 1px solid var(--input-border);">
+                                    <option value="all">All Fields</option>
+                                    <option value="science">Science / Tech</option>
+                                    <option value="commerce">Commerce / Business</option>
+                                    <option value="arts">Arts / Humanities</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-grid" id="scholarships-grid">
+                        <div class="loader-container">
+                            <div class="loader"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- VIEW: Exams -->
+            <div id="view-exams" class="dashboard-view">
+                <section class="panel full-width">
+                    <div class="section-header">
+                        <h2>📚 Upcoming Competitive Exams</h2>
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem;">Find suitable exams by career choice with date, difficulty, and eligibility details.</p>
+                    </div>
+
+                    <!-- SUCCESS RATE PANEL -->
+                    <div id="exam-success-panel" class="hidden" style="margin-bottom: 2.5rem; background: var(--card-bg); border: 1px solid var(--card-border); padding: 2rem; border-radius: var(--radius-lg); overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <div>
+                            <h3 style="margin-bottom: 0.5rem; color: var(--text-primary); font-size: 1.2rem;">Expected Success Breakdown</h3>
+                            <h4 id="success-panel-exam-name" style="color: var(--primary-color); margin-bottom: 1.5rem; font-size: 1rem;"></h4>
+                            
+                            <div id="success-breakdown" style="display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-primary);">
+                                <!-- Populated dynamically by JS -->
+                            </div>
+                            
+                            <div id="success-explanation" style="font-size: 0.85rem; color: var(--text-secondary); font-style: italic; background: var(--input-bg); padding: 1rem; border-radius: var(--radius-md); border-left: 2px solid var(--warning-color);">
+                                <!-- Populated dynamically by JS -->
+                            </div>
+                        </div>
+                        <div id="success-bands-container" style="width: 100%; max-height: 250px; display: flex; flex-direction: column; justify-content: center;">
+                            <canvas id="successChart" style="max-height: 250px;"></canvas>
+                        </div>
+                    </div>
+                    <div class="card-grid" id="exams-grid">
+                        <div class="loader-container">
+                            <div class="loader"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Login/Signup Modal -->
+    <div id="auth-modal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+        <div class="panel auth-panel fade-in" style="width: 100%; max-width: 450px; position: relative; margin: 1rem;">
+            <button id="close-auth-modal" class="btn-icon" style="position: absolute; top: 1rem; right: 1rem;">×</button>
+            
+            <section id="login-section">
+                <h2 style="justify-content: center; text-align: center; margin-bottom: 1.5rem;">👤 Secure Login</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="login-user" required autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="login-pass" required autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="login-btn">Log In</button>
+                    <p id="login-error" style="color: var(--urgent-color); text-align: center; margin-top: 1rem;"></p>
+                </form>
+                <div class="auth-switch" style="text-align: center; margin-top: 1.5rem; color: var(--text-secondary);">
+                    Don't have an account? <a id="show-signup" style="color: var(--primary-color); cursor: pointer; font-weight: 600;">Sign Up</a>
+                </div>
+            </section>
+
+            <section id="signup-section" class="hidden">
+                <h2 style="justify-content: center; text-align: center; margin-bottom: 1.5rem;">✨ Create Account</h2>
+                <form id="signup-form">
+                    <div class="form-group">
+                        <label>Choose a Username</label>
+                        <input type="text" id="signup-user" required autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label>Choose a Password</label>
+                        <input type="password" id="signup-pass" required autocomplete="new-password">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="signup-btn">Sign Up</button>
+                    <p id="signup-error" style="color: var(--urgent-color); text-align: center; margin-top: 1rem;"></p>
+                </form>
+                <div class="auth-switch" style="text-align: center; margin-top: 1.5rem; color: var(--text-secondary);">
+                    Already have an account? <a id="show-login" style="color: var(--primary-color); cursor: pointer; font-weight: 600;">Log In</a>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <div id="chat-widget-container" style="position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end;">
+        <div id="chat-panel" class="hidden panel fade-in" style="width: 350px; max-height: 500px; margin-bottom: 1rem; padding: 0; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.5); border: 1px solid var(--card-border);">
+            <div style="background: var(--primary-color); padding: 1rem; color: #fff; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
+                <span>🤖 AI Career Assistant</span>
+                <button id="close-chat-btn" class="btn-icon" style="color: #fff; opacity: 0.8; font-size: 1.2rem; cursor: pointer; border: none; background: transparent;">×</button>
+            </div>
+            <div id="chat-messages" style="flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 1rem; max-height: 350px; background: var(--card-bg);">
+                <div class="chat-message bot-message" style="align-self: flex-start; background: rgba(99, 102, 241, 0.1); border-left: 3px solid var(--primary-color); padding: 0.8rem; border-radius: 0 8px 8px 8px; color: var(--text-primary); font-size: 0.9rem; max-width: 85%;">
+                    Hi there! I'm your AI assistant. Generate a roadmap, then ask me anything about your career path, success rates, or scholarships!
+                </div>
+            </div>
+            <div style="padding: 1rem; background: var(--input-bg); border-top: 1px solid var(--card-border); display: flex; gap: 0.5rem; align-items: center;">
+                <input type="text" id="chat-input" placeholder="Type a message..." style="flex: 1; padding: 0.5rem 1rem; border-radius: var(--radius-md); border: 1px solid var(--input-border); background: var(--card-bg); color: var(--text-primary); font-size: 0.9rem; outline: none;">
+                <button id="chat-send-btn" class="btn btn-primary" style="padding: 0.5rem 1rem; border-radius: var(--radius-md); border: none; cursor: pointer;">Send</button>
+            </div>
+        </div>
+        <button id="chat-toggle-btn" style="width: 60px; height: 60px; border-radius: 50%; background: var(--primary-color); color: #fff; font-size: 1.5rem; border: none; cursor: pointer; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease;">
+            💬
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/app_v2.js?v=7"></script>
+</body>
+
+</html>
